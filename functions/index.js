@@ -3,7 +3,7 @@ const firebase = require('firebase');
 const firebaseConfig = require('./utils/config'); 
 const app = require("express")();
 
-const {signUp, logIn} = require('./handlers/users');
+const {signUp, logIn, uploadImage} = require('./handlers/users');
 const {authMiddleware} = require('./utils/middleWare');
 const {getAllScreams, createScream} = require('./handlers/screams');
 
@@ -12,6 +12,9 @@ firebase.initializeApp(firebaseConfig);
 // authentication 
 app.post('/signup',signUp);
 app.post('/login', logIn);
+
+// user routes
+app.post('/user/image',authMiddleware, uploadImage);
 
 // Db operations
 app.get("/screams", getAllScreams);
