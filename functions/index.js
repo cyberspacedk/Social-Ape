@@ -3,6 +3,7 @@ const admin = require("firebase-admin");
 const firebase = require('firebase');
 const app = require("express")();
 
+const {isEmail, isEmpty } = require('./utils/helpers');
 
 const firebaseConfig = {
   apiKey: "AIzaSyAdrFuIP_SgfyiLL59YCUqXX34x8sC1rXo",
@@ -20,6 +21,7 @@ admin.initializeApp();
 
 const db = admin.firestore();
 
+// SIGNUP
 app.post('/signup', (req, res)=>{
   const newUser = {
     email: req.body.email,
@@ -27,7 +29,17 @@ app.post('/signup', (req, res)=>{
     confirmPassword: req.body.confirmPassword, 
     handle: req.body.handle, 
   }
-let token, userId;
+
+  // Validation section
+  const errors = {} 
+  Object.entries(newUser).forEach(([key, value])=> { if(isEmpty(value)) errors[key] = 'Must not be empty'}) 
+  if(!isEmail(newUser.email)) errors.email = 'Invalid email format!'; 
+  if(newUser.password !== newUser.confirmPassword) errors.confirmPassword = 'Password should match'; 
+  if(Object.keys(errors).length>0) return res.status(400).json(errors);
+  //=== 
+
+  let token, userId;
+
   db
   .doc(`/users/${newUser.handle}`)
   .get()
@@ -63,6 +75,28 @@ let token, userId;
       return res.status(500).json({error: err.code}) 
     }
   })
+})
+
+// LOGIN
+app.post('/login', (req,res)=> {
+  const user = {
+    email: req.body.email,
+    password: req.body.password
+  } 
+   // Validation section
+   const errors = {} 
+   Object.entries(user).forEach(([key, value])=> { if(isEmpty(value)) errors[key] = 'Must not be empty'}) 
+   if(!isEmail(user.email)) errors.email = 'Invalid email format!';  
+   if(Object.keys(errors).length>0) return res.status(400).json(errors);
+   //=== 
+
+  firebase.auth().signInWithEmailAndPassword(user.email, user.password)
+  .then(data=>  data.user.getIdToken())
+  .then(token=>  res.json({token}))
+  .catch(err=> {
+    if(err.code ==='auth/wrong-password') return res.status(403).json({general: "Wrong credentials"})
+    return res.status(500).json({error: err.code})
+  }) 
 })
 
 app.get("/screams", (req, res) => {
