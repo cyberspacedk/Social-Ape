@@ -1,15 +1,6 @@
+const {admin, db} = require('./admin');
 
-const isEmpty = string => {
-  if(string.trim()==='') return true;
-  else return false;
-}
-
-const isEmail = email => {
-  const emailRegEx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return email.match(emailRegEx)  
-}
-
-const authMiddleware = (req, res, next) => {
+exports.authMiddleware = (req, res, next) => {
   let idToken;
 
   if(req.headers.authorization && req.headers.authorization.startsWith('Bearer ')){
@@ -37,5 +28,3 @@ const authMiddleware = (req, res, next) => {
     res.status(403).json(err)
   })
 }
-
-module.exports = {isEmpty, isEmail, authMiddleware}
