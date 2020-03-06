@@ -31,3 +31,15 @@ exports.validateLoginData = (data)=> {
     valid: Object.keys(errors).length ? false : true
   } 
 }
+
+exports.reduceUserDetails = (data) => { 
+  let userDetails = {};
+  
+  Object.entries(data).forEach(([key, value])=> {  
+    if(!isEmpty(value)) userDetails[key] = value
+  })
+
+  if(data.website.substring(0,4) !== 'http') userDetails.website = `http://${data.website.trim()}`
+  else userDetails.website = data.website; 
+  return userDetails
+}
