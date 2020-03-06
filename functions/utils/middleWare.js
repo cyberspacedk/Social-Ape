@@ -20,8 +20,9 @@ exports.authMiddleware = (req, res, next) => {
     .limit(1)
     .get()
   })
-  .then(data=> {
+  .then(data=> { 
     req.user.handle = data.docs[0].data().handle;
+    req.user.imageUrl = data.docs[0].data().imageUrl;
     return next()
   })
   .catch(err=>{

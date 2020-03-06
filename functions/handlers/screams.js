@@ -39,3 +39,43 @@ exports.createScream = (req, res) => {
       console.log(err);
     });
 }
+
+exports.getScream = (req, res)=> {
+  let screamData={};
+  db.doc(`/screams/${req.params.screamId}`).get()
+  .then(doc=> {
+    if(!doc.exists){
+      return res.status(404).json({error: 'Scream not found'})
+    }
+    screamData = doc.data();
+    screamData.screamId = doc.id;
+    return db.collection('comments').where('screamId', '==', req.params.screamId).get()
+  })
+  .then(data=>{
+    screamData.comments = [];
+    data.forEach(doc=> {screamData.comments.push(doc.data())});
+    return res.json(screamData);
+  })
+  .catch(err=> {
+    res.status(500).json({error: err.code})
+  })
+}
+
+exports.postCommentOnScream = (req, res)=> { 
+  if(!req.body) return res.status(400).json({error: 'Comment must not be empty'});
+  const newComment = {
+    body: req.body,
+    createdAt: new Date().toISOString(),
+    screamId: req.params.screamId,
+    userHandle: req.user.handle, 
+    userImage: req.user.imageUrl 
+  }
+
+  db.doc(`/screams/${req.params.screamId}`).get()
+  .then(doc=>{
+    if(!doc.exists) return res.status(404).json({error: 'Not found'});
+    return db.collection('comments').add(newComment)
+  })
+  .then(()=> res.json(newComment))
+  .catch(err=> res.status(500).json({error: err.code}))
+}
