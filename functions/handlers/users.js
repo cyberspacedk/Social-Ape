@@ -200,7 +200,7 @@ exports.likeScream = (req, res) => {
             userHandle: req.user.handle
           })
           .then(() => {
-            screamData.likeCount += 1;
+            screamData.likeCount = screamData.likeCount + 1;
             return screamDocument.update({
               likeCount: screamData.likeCount
             });
@@ -259,5 +259,59 @@ exports.unlikeScream = (req, res) => {
     })
     .catch(err => {
       res.status(500).json({ error: err.code });
+    });
+};
+
+exports.getUserDetails = (req, res) => {
+  let userData = {};
+  db.doc(`/users/${req.params.handle}`)
+    .get()
+    .then(doc => {
+      if (doc.exists) {
+        userData.user = doc.data();
+        return db
+          .collection("screams")
+          .where("userHandle", "==", req.params.handle)
+          .orderBy("createdAt", "desc")
+          .get();
+      } else {
+        return res.status(404).json({ error: "User not found" });
+      }
+    })
+    .then(data => {
+      userData.screams = [];
+      data.forEach(doc => {
+        userData.screams.push({
+          screamId: doc.id,
+          body: doc.data().body,
+          createdAt: doc.data().createdAt,
+          userHandle: doc.data().userHandle,
+          userImage: doc.data().body,
+          likeCount: doc.data().likeCount,
+          commentCount: doc.data().commentCount
+        });
+      });
+      return res.json(userData);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ error: err.code });
+    });
+};
+
+exports.markNotificationsAsRead = (req, res) => {
+  let batch = db.batch();
+  req.body.forEach(notificationId => {
+    const notification = db.doc(`/notifications/${notificationId}`);
+    batch.update(notification, { read: true });
+  });
+  batch
+    .commit()
+    .then(() => {
+      return res.json({ message: "Notification marked as read" });
+    })
+    .catch(err => {
+      console.log(err);
+      return res.status(500).json({ error: err.code });
     });
 };
