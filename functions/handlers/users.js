@@ -56,7 +56,9 @@ exports.signUp = (req, res) => {
       if (err.code === "auth/email-already-in-use") {
         return res.status(400).json({ email: "Email is already in use" });
       } else {
-        return res.status(500).json({ error: err.code });
+        return res
+          .status(500)
+          .json({ general: "Smth went wrong, try again later" });
       }
     });
 };
@@ -164,9 +166,31 @@ exports.getAuthenticatedUser = (req, res) => {
       data.forEach(doc => {
         userData.likes.push(doc.data());
       });
+      return db
+        .collection("notifications")
+        .where("recipient", "==", req.user.handle)
+        .limit(10)
+        .get();
+    })
+    .then(data => {
+      userData.notifications = [];
+      data.forEach(doc => {
+        userData.notification.push({
+          recipient: doc.data().recipient,
+          sender: doc.data().sender,
+          createdAt: doc.data().createdAt,
+          screamId: doc.data().screamId,
+          type: doc.data().type,
+          read: doc.data().read,
+          notificationId: doc.id
+        });
+      });
       return res.json(userData);
     })
-    .catch(err => res.status(500).json({ error: err.code }));
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ error: err.code });
+    });
 };
 
 exports.likeScream = (req, res) => {
