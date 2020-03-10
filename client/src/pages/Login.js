@@ -1,16 +1,19 @@
-import React, { Component, useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from 'prop-types'; 
+import axios from 'axios';
 import {Link} from 'react-router-dom';
+import {connect} from 'react-redux';
+
 import Grid from '@material-ui/core/Grid'
 import withStyles from '@material-ui/core/styles/withStyles';
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import CircularProgress from '@material-ui/core/CircularProgress'
-import Button from '@material-ui/core/Button';
-
-import axios from 'axios';
+import Button from '@material-ui/core/Button'; 
 
 import AppIcon from '../images/icon.png';
+
+import {loginUser} from '../redux/actions/userActions';
 
 const styles = {
   form:{
@@ -39,27 +42,25 @@ const styles = {
     position: 'absolute'
   }
 }
+
 const initialFormState = {
   email: '',
   password: '',
   error: {}
 }
 
-const Login = ({classes, history})=> { 
+const Login = ({classes, history, loginUser, ui, user})=> { 
   const [formData, setFormData] = useState(initialFormState);  
-  const [loading, setLoading] = useState(false);
+
+  useEffect(()=>{
+    if(ui.errors){
+      setFormData(prevState=> ({...prevState, error : ui.errors}))
+    }
+  },[ui.errors]);
 
     const handleFormSubmit = async (e) => { 
       e.preventDefault();
-      setLoading(true);
-      try{
-        const {data} = await axios.post('/login', formData); 
-        history.push('/')
-      }catch(err){ 
-        setFormData(prevState=> ({...prevState, error: err.response.data})); 
-      }finally{
-        setLoading(false);
-      }  
+      loginUser(formData, history) 
     }
 
     const handleFieldChange = ({target:{name, value}})=> {
@@ -112,10 +113,10 @@ const Login = ({classes, history})=> {
           variant="contained" 
           color="primary" 
           className={classes.button}
-          disabled={loading}
+          disabled={ui.loading}
         >
           Login
-          {loading && <CircularProgress size={25} className={classes.spinner}/>}
+          {ui.loading && <CircularProgress size={25} className={classes.spinner}/>}
         </Button>
         <br />
         <small>dont have an account ? sign up <Link to="/signup">here</Link></small>
@@ -129,6 +130,18 @@ const Login = ({classes, history})=> {
 
 Login.propTypes = {
   classes: PropTypes.shape({}).isRequired,
+  loginUser: PropTypes.func.isRequired,
+  user: PropTypes.shape({}).isRequired,
+  ui: PropTypes.shape({}).isRequired,
 }
 
-export default withStyles(styles)(Login);
+const mstp = state=> ({
+  user: state.user,
+  ui: state.ui
+});
+
+const mdtp = {
+  loginUser
+}
+
+export default connect(mstp, mdtp)(withStyles(styles)(Login))
