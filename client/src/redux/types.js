@@ -14,3 +14,4 @@ export const SET_SCREAMS = 'SET_SCREAMS';
 export const LOADING_DATA = 'LOADING_DATA';
 export const LIKE_SCREAM = 'LIKE_SCREAM';
 export const UNLIKE_SCREAM = 'UNLIKE_SCREAM'; 
+export const DELETE_SCREAM = 'DELETE_SCREAM';

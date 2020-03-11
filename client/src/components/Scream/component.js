@@ -16,11 +16,13 @@ import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
 
 import MyButton from '../../util/MyButton';  
 import {likeScream, unlikeScream} from '../../redux/actions/dataActions'
+import DeleteScream from '../DeleteScream';
 
 const styles = {
   card: {
     display: "flex",
-    marginBottom: 20
+    marginBottom: 20,
+    position: 'relative',
   },
   image: {
     minWidth: '200px'
@@ -31,16 +33,14 @@ const styles = {
   }
 };
 
-const Scream = ({ classes, scream, user, likeScream, unlikeScream})=> {
-  console.log("➡️: Scream -> scream", scream)
-  dayjs.extend(relativeTime); 
+const Scream = ({ classes, scream, user, likeScream, unlikeScream})=> { 
+  dayjs.extend(relativeTime);  
+  const { body, createdAt, userHandle, userImage, likeCount, commentCount } = scream
 
- const { body, createdAt, userHandle, userImage, likeCount, commentCount } = scream
   const likedScream = () => {
     return user.likes && user.likes.find(({screamId})=> screamId === scream.screamId) 
   }
-  
-  console.log("➡️: likedScream -> likedScream", likedScream())
+   
   const likeScreamHandler = ()=>{
     likeScream(scream.screamId)
   }
@@ -48,6 +48,7 @@ const Scream = ({ classes, scream, user, likeScream, unlikeScream})=> {
   const unlikeScreamHandler = ()=>{
     unlikeScream(scream.screamId)
   }
+
   const likeButton = !user.authenticated ? (
     <MyButton tip="Like">
       <Link to="/login">
@@ -66,6 +67,7 @@ const Scream = ({ classes, scream, user, likeScream, unlikeScream})=> {
         )  
     );
 
+    const deleteButton = user.authenticated &&  userHandle === user.credentials.handle ? (<DeleteScream screamId={scream.screamId}/>) : null;
   return (
     <Card className={classes.card}>
       <CardMedia
@@ -82,6 +84,7 @@ const Scream = ({ classes, scream, user, likeScream, unlikeScream})=> {
         >
           {userHandle}
         </Typography>
+        {deleteButton}
         <Typography variant="body2" color="textSecondary">
           {dayjs(createdAt).fromNow()}
         </Typography>
