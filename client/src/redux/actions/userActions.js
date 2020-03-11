@@ -66,3 +66,23 @@ const setAuthorizationHeader = token => {
   localStorage.setItem("FBIdToken", firebaseToken);
   axios.defaults.headers.common["Authorization"] = firebaseToken;
 };
+
+export const uploadImage = formData => async dispatch => {
+  dispatch({type: LOADING_USER});
+  try{
+    await axios.post('/user/image', formData);
+    dispatch(getUserData())
+  } catch(err){
+    console.log(err)
+  }
+}
+  
+export const editUserDetails = userDetails => async dispatch => {
+  try{
+    dispatch({type: LOADING_USER});
+    await axios.post('/user', userDetails);
+    dispatch(getUserData())
+  }catch(err){
+    console.log(err)
+  }
+}
