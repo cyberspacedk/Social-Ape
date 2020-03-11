@@ -6,14 +6,17 @@ import {editUserDetails} from '../../redux/actions/userActions';
 
 import withStyles from "@material-ui/core/styles/withStyles";
 import Tooltip from '@material-ui/core/Tooltip';
-import IconButton from '@material-ui/core/Tooltip';  
+import IconButton from '@material-ui/core/IconButton';  
 import DialogTitle from '@material-ui/core/DialogTitle';  
 import EditIcon from '@material-ui/icons/Edit'; 
 import { DialogContent, TextField } from "@material-ui/core";
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions'; 
-import DialogContentText from '@material-ui/core/DialogContentText'; 
+import DialogActions from '@material-ui/core/DialogActions';  
+
+import MyButton from '../../util/MyButton';
+
+
 const styles = theme => ({
   button: {
     float: 'right'
@@ -62,17 +65,15 @@ const handleSubmit = (e)=>{
 
   return (
    <>
-   <Tooltip title="Edit details" placement="top">
-      <IconButton onClick={handleOpen} className={classes.button}>
-        <EditIcon color="primary"/>
-      </IconButton>
-   </Tooltip>
-   <Dialog
-   open={userDetails.open}
-   onClose={handleClose}
-   fullWidth
-   maxWidth="sm"
-   >
+    <MyButton tip="Edit details" onClick={handleOpen} btnClassName={classes.button}>
+      <EditIcon color="primary"/>
+    </MyButton>  
+    <Dialog
+      open={userDetails.open}
+      onClose={handleClose}
+      fullWidth
+      maxWidth="sm"
+    >
      <DialogTitle>Edit your details</DialogTitle>
      <DialogContent>
        <form>
