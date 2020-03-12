@@ -19,4 +19,5 @@ const mstp = state => ({
 AuthRoute.propTypes = {
   authenticated: PropTypes.bool.isRequired
 };
+
 export default connect(mstp)(AuthRoute);

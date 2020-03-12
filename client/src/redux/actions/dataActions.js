@@ -78,3 +78,14 @@ export const getScream = screamId => async dispatch => {
     dispatch({type: STOP_LOADING_UI})
   }  
 }
+
+export const getUser = userHandle => async dispatch => {
+  try {
+    dispatch({type: LOADING_DATA});
+    const {data} = await axios.get(`users/${userHandle}`);
+    dispatch({type: SET_SCREAMS, payload: data.screams})
+  } catch (error) {
+    console.log(error);
+    dispatch({type: SET_SCREAMS, payload: null})
+  }
+}
