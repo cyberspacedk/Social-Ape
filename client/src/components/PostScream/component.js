@@ -32,8 +32,7 @@ closeButton:{
 }
 
 const PostScream = ({ui, postScream, classes}) => {
-  const [screamData, setScreamData] = useState({body:''})
-  console.log("➡️: PostScream -> screamData", screamData)
+  const [screamData, setScreamData] = useState({body:''}) 
   const [opened, setOpened] = useState(false);
   const [error, setError] = useState({})
 
