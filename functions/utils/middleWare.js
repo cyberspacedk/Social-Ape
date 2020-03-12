@@ -24,7 +24,6 @@ exports.authMiddleware = (req, res, next) => {
         .get();
     })
     .then(data => {
-      console.log("============", data);
       req.user.handle = data.docs[0].data().handle;
       req.user.imageUrl = data.docs[0].data().imageUrl;
       return next();
