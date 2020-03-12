@@ -3,13 +3,12 @@ import PropTypes from 'prop-types'
 import { Link } from "react-router-dom";
 import {connect} from 'react-redux';
 
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Button from "@material-ui/core/Button";
-import MyButton from '../../util/MyButton';
+import {AppBar, Toolbar, Button} from "@material-ui/core";   
 
 import HomeIcon from '@material-ui/icons/Home'; 
 import Notifications from '@material-ui/icons/Notifications';
+
+import MyButton from '../../util/MyButton';
 import PostScream from '../PostScream';
 
 const Navbar = ({authenticated})=> { 
