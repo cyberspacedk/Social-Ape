@@ -8,9 +8,9 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Button from "@material-ui/core/Button";
 import MyButton from '../../util/MyButton';
 
-import AddIcon from '@material-ui/icons/Add';
 import HomeIcon from '@material-ui/icons/Home'; 
 import Notifications from '@material-ui/icons/Notifications';
+import PostScream from '../PostScream';
 
 const Navbar = ({authenticated})=> { 
   return (
@@ -18,13 +18,12 @@ const Navbar = ({authenticated})=> {
       <Toolbar className="nav-container">
         {authenticated ? (
           <>
-            <MyButton tip="Create a Scream">
-              <AddIcon color="primary"/>  
-            </MyButton>
-            <Link to="/" />
+           <PostScream />
+            <Link to="/">
             <MyButton tip="Home">
               <HomeIcon color="primary"/>  
             </MyButton>
+            </Link>
             <MyButton tip="Notifications">
               <Notifications color="primary"/>  
             </MyButton>

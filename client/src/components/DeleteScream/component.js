@@ -1,14 +1,8 @@
 import React, {useState} from "react";
-import PropTypes from 'prop-types';
-import { Link } from "react-router-dom"; 
+import PropTypes from 'prop-types'; 
 import {connect} from 'react-redux';
 
-import withStyles from "@material-ui/core/styles/withStyles";
-import Tooltip from '@material-ui/core/Tooltip';
-import IconButton from '@material-ui/core/IconButton';  
-import EditIcon from '@material-ui/icons/Edit'; 
-import { DialogContent, TextField } from "@material-ui/core";
-
+import withStyles from "@material-ui/core/styles/withStyles"; 
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';  
 import DialogActions from '@material-ui/core/DialogActions';  
@@ -17,6 +11,7 @@ import Button from '@material-ui/core/Button';
 import MyButton from '../../util/MyButton';  
 
 import {deleteScream} from '../../redux/actions/dataActions';
+
 const styles = {
   deleteButton:{
     position: 'absolute',

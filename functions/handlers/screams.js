@@ -13,7 +13,8 @@ exports.getAllScreams = (req, res) => {
           userHandle: doc.data().userHandle,
           createdAt: doc.data().createdAt,
           commentCount: doc.data().commentCount,
-          userImage: doc.data().userImage
+          userImage: doc.data().userImage, 
+          likeCount: doc.data().likeCount
         });
       });
       return res.json(screams);
@@ -22,6 +23,9 @@ exports.getAllScreams = (req, res) => {
 };
 
 exports.createScream = (req, res) => {
+  if(!req.body.body){
+    return res.json({error: 'Must not be empty'})
+  }
   const newScream = {
     body: req.body.body,
     userHandle: req.user.handle,
