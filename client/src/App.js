@@ -3,7 +3,7 @@ import axios from "axios";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import jwtDecode from "jwt-decode";
 import { Provider } from "react-redux";
-import store from "./redux/store"; 
+import store from "./redux/store";
 
 import { ThemeProvider } from "@material-ui/core/styles";
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
@@ -11,7 +11,7 @@ import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
-import User from './pages/User';
+import User from "./pages/User";
 import NavBar from "./components/Navbar";
 
 import AuthRoute from "./util/AuthRoute";
@@ -25,6 +25,9 @@ import "./App.css";
 
 const theme = createMuiTheme(appTheme);
 const token = localStorage.FBIdToken;
+
+axios.defaults.baseURL =
+  "https://europe-west1-social-ape-f0156.cloudfunctions.net/api";
 
 if (token) {
   const decodedToken = jwtDecode(token);
@@ -48,7 +51,7 @@ function App() {
               <Route exact path="/" component={Home} />
               <AuthRoute exact path="/login" component={Login} />
               <AuthRoute exact path="/signup" component={SignUp} />
-              <Route exact path="/users/:handle" component={User}/>
+              <Route exact path="/users/:handle" component={User} />
             </Switch>
           </div>
         </BrowserRouter>

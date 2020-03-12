@@ -1,13 +1,18 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import withStyles from '@material-ui/core/styles/withStyles';
-import dayjs from 'dayjs';
+import React from "react";
+import PropTypes from "prop-types";
+import withStyles from "@material-ui/core/styles/withStyles";
+import dayjs from "dayjs";
+import { Link } from "react-router-dom";
 
-import {Link as MULink, Paper, Typography} from '@material-ui/core';
+import { Link as MULink, Paper, Typography } from "@material-ui/core";
 
 import LocationOn from "@material-ui/icons/LocationOn";
 import LinkIcon from "@material-ui/icons/Link";
 import CalendarToday from "@material-ui/icons/CalendarToday";
+
+import EditIcon from "@material-ui/icons/Edit";
+import KeyboardReturn from "@material-ui/icons/KeyboardReturn";
+import { uploadImage, logoutUser } from "../../redux/actions/userActions";
 
 const styles = theme => ({
   paper: {
@@ -16,7 +21,7 @@ const styles = theme => ({
   profile: {
     "& .image-wrapper": {
       textAlign: "center",
-      position: "relative", 
+      position: "relative",
       "& button": {
         position: "absolute",
         top: "80%",
@@ -57,53 +62,51 @@ const styles = theme => ({
   }
 });
 
-const StaticProfile = ({classes, profile:{handle, createdAt, imageUrl, bio, website, location}}) => {
+const StaticProfile = ({
+  classes,
+  profile: { handle, createdAt, imageUrl, bio, website, location }
+}) => {
   return (
     <Paper className={classes.paper}>
-        <div className={classes.profile}>
-          <div className="image-wrapper">
-            <img src={imageUrl} alt="Profile" className="profile-image" />
-           
-          </div>
-          <hr />
-          <div className="profile-details">
-            <MULink
-              component={Link}
-              to={`/users/${handle}`}
-              color="primary"
-              variant="h5"
-            >
-              @{handle}
-            </MULink>
-          </div>
-          <hr />
-          {bio && <Typography variant="body2">{bio}</Typography>}
-          <hr />
-          {location && (
-            <>
-              <LocationOn color="primary" />
-              <span>{location}</span>
-              <hr />
-            </>
-          )}
-          {website && (
-            <>
-              <LinkIcon color="primary" />
-              <a href={website} target="_blank" rel="noopener noreferrer">
-                {" "}
-                {website}
-              </a>
-              <hr />
-            </>
-          )}
-          <CalendarToday color="primary" />{" "}
-          <span>Joined {dayjs(createdAt).format("MMM YYY")}</span> 
+      <div className={classes.profile}>
+        <div className="image-wrapper">
+          <img src={imageUrl} alt="Profile" className="profile-image" />
         </div>
-        <MyButton tip="Logout" onClick={handleLogout} btnClassName="button">
-          <KeyboardReturn color="primary"/>
-        </MyButton> 
-        <EditDetails />
-      </Paper>
-  )
-}
-export default withStyles(styles)(StaticProfile)
+        <hr />
+        <div className="profile-details">
+          <MULink
+            component={Link}
+            to={`/users/${handle}`}
+            color="primary"
+            variant="h5"
+          >
+            @{handle}
+          </MULink>
+        </div>
+        <hr />
+        {bio && <Typography variant="body2">{bio}</Typography>}
+        <hr />
+        {location && (
+          <>
+            <LocationOn color="primary" />
+            <span>{location}</span>
+            <hr />
+          </>
+        )}
+        {website && (
+          <>
+            <LinkIcon color="primary" />
+            <a href={website} target="_blank" rel="noopener noreferrer">
+              {" "}
+              {website}
+            </a>
+            <hr />
+          </>
+        )}
+        <CalendarToday color="primary" />{" "}
+        <span>Joined {dayjs(createdAt).format("MMM YYY")}</span>
+      </div>
+    </Paper>
+  );
+};
+export default withStyles(styles)(StaticProfile);

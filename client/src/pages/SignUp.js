@@ -18,7 +18,8 @@ const styles = {
   form: {
     maxWidth: "400px",
     textAlign: "center",
-    justifyContent: "center"
+    justifyContent: "center",
+    margin: "0 auto"
   },
   image: {
     margin: "20px auto"

@@ -6,18 +6,18 @@ import { Link } from "react-router-dom";
 import dayjs from "dayjs";
 
 import Button from "@material-ui/core/Button";
-import Paper from "@material-ui/core/Paper"; 
+import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import LocationOn from "@material-ui/icons/LocationOn";
 import LinkIcon from "@material-ui/icons/Link";
 import CalendarToday from "@material-ui/icons/CalendarToday";
-import EditIcon from '@material-ui/icons/Edit';
-import MULink from "@material-ui/core/Link"; 
-import KeyboardReturn from '@material-ui/icons/KeyboardReturn';
-import {uploadImage, logoutUser} from '../../redux/actions/userActions';
+import EditIcon from "@material-ui/icons/Edit";
+import MULink from "@material-ui/core/Link";
+import KeyboardReturn from "@material-ui/icons/KeyboardReturn";
+import { uploadImage, logoutUser } from "../../redux/actions/userActions";
 
-import EditDetails from '../EditDetails';
-import MyButton from '../../util/MyButton';
+import EditDetails from "../EditDetails";
+import MyButton from "../../util/MyButton";
 
 const styles = theme => ({
   paper: {
@@ -26,7 +26,7 @@ const styles = theme => ({
   profile: {
     "& .image-wrapper": {
       textAlign: "center",
-      position: "relative", 
+      position: "relative",
       "& button": {
         position: "absolute",
         top: "80%",
@@ -64,6 +64,9 @@ const styles = theme => ({
     "& a": {
       margin: "20px 10px"
     }
+  },
+  userBio: {
+    textAlign: "center"
   }
 });
 
@@ -77,15 +80,15 @@ const Profile = ({
   uploadImage,
   logoutUser
 }) => {
-  const handleImageChange = (e) => {
+  const handleImageChange = e => {
     const image = e.target.files[0];
     const formData = new FormData();
-    formData.append('image', image, image.name);
-    uploadImage(formData)
+    formData.append("image", image, image.name);
+    uploadImage(formData);
   };
 
-  const handleEditPicture = ()=> document.querySelector('#imageInput').click();  
-  const handleLogout = ()=> logoutUser();
+  const handleEditPicture = () => document.querySelector("#imageInput").click();
+  const handleLogout = () => logoutUser();
 
   let profileMarkup = !loading ? (
     authenticated ? (
@@ -93,10 +96,19 @@ const Profile = ({
         <div className={classes.profile}>
           <div className="image-wrapper">
             <img src={imageUrl} alt="Profile" className="profile-image" />
-            <input type="file" id="imageInput" onChange={handleImageChange} hidden/> 
-            <MyButton tip="Edit profile picture" onClick={handleEditPicture} btnClassName="button">
-              <EditIcon color="primary"/>
-           </MyButton>
+            <input
+              type="file"
+              id="imageInput"
+              onChange={handleImageChange}
+              hidden
+            />
+            <MyButton
+              tip="Edit profile picture"
+              onClick={handleEditPicture}
+              btnClassName="button"
+            >
+              <EditIcon color="primary" />
+            </MyButton>
           </div>
           <hr />
           <div className="profile-details">
@@ -110,7 +122,11 @@ const Profile = ({
             </MULink>
           </div>
           <hr />
-          {bio && <Typography variant="body2">{bio}</Typography>}
+          {bio && (
+            <Typography variant="body2" className={classes.userBio}>
+              {bio}
+            </Typography>
+          )}
           <hr />
           {location && (
             <>
@@ -130,11 +146,11 @@ const Profile = ({
             </>
           )}
           <CalendarToday color="primary" />{" "}
-          <span>Joined {dayjs(createdAt).format("MMM YYY")}</span> 
+          <span>Joined {dayjs(createdAt).format("MMM YYY")}</span>
         </div>
         <MyButton tip="Logout" onClick={handleLogout} btnClassName="button">
-          <KeyboardReturn color="primary"/>
-        </MyButton> 
+          <KeyboardReturn color="primary" />
+        </MyButton>
         <EditDetails />
       </Paper>
     ) : (
@@ -172,11 +188,13 @@ Profile.propTypes = {
   classes: PropTypes.shape({}).isRequired,
   user: PropTypes.shape({}).isRequired,
   logoutUser: PropTypes.func.isRequired,
-  uploadImage: PropTypes.func.isRequired,
+  uploadImage: PropTypes.func.isRequired
 };
 
 const mstp = state => ({
-    user: state.user
-  });
+  user: state.user
+});
 
-export default connect(mstp, {logoutUser, uploadImage})(withStyles(styles)(Profile));
+export default connect(mstp, { logoutUser, uploadImage })(
+  withStyles(styles)(Profile)
+);
