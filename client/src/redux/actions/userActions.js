@@ -61,7 +61,7 @@ export const getUserData = () => async dispatch => {
   }
 };
 
-const setAuthorizationHeader = token => {
+export const setAuthorizationHeader = token => {
   const firebaseToken = `Bearer ${token}`;
   localStorage.setItem("FBIdToken", firebaseToken);
   axios.defaults.headers.common["Authorization"] = firebaseToken;

@@ -24,13 +24,14 @@ import { SET_AUTHENTICATED } from "./redux/types";
 import "./App.css";
 
 const theme = createMuiTheme(appTheme);
-const token = localStorage.FBIdToken;
+const token = localStorage.FBIdToken;   
 
 axios.defaults.baseURL =
   "https://europe-west1-social-ape-f0156.cloudfunctions.net/api";
 
 if (token) {
   const decodedToken = jwtDecode(token);
+  console.log("➡️: decodedToken", decodedToken)
   if (decodedToken.exp * 1000 < Date.now()) {
     store.dispatch(logoutUser());
   } else {
@@ -39,6 +40,7 @@ if (token) {
     store.dispatch(getUserData());
   }
 }
+store.dispatch(getUserData());
 
 function App() {
   return (

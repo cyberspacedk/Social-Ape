@@ -7,6 +7,8 @@ const {
   reduceUserDetails
 } = require("../utils/validators");
 
+const fbProvider = new firebase.auth.FacebookAuthProvider();
+
 exports.signUp = (req, res) => {
   const newUser = {
     email: req.body.email,
@@ -67,7 +69,7 @@ exports.logIn = (req, res) => {
   const user = {
     email: req.body.email,
     password: req.body.password
-  };
+  }; 
 
   const { valid, errors } = validateLoginData(user);
   if (!valid) return res.status(400).json(errors);
@@ -84,6 +86,25 @@ exports.logIn = (req, res) => {
       return res.status(500).json({ error: err.code });
     });
 };
+
+exports.socials = (req, res)=> { 
+  firebase
+  .auth()
+  .signInWithPopup(fbProvider)
+  .then((result)=> { 
+    const token = result.credential.accessToken;  
+    const user = result.user; 
+
+    res.json({token, user}); 
+  }).catch(function(error) { 
+    const errorCode = error.code; 
+    const errorMessage = error.message;  
+    const email = error.email; 
+    const credential = error.credential;  
+
+    res.json({errorCode,errorMessage})
+  });
+}
 
 exports.addUserDetails = (req, res) => {
   let userDetails = reduceUserDetails(req.body);

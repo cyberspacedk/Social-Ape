@@ -4,6 +4,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import dayjs from "dayjs";
+import axios from 'axios';
 
 import Button from "@material-ui/core/Button";
 import Paper from "@material-ui/core/Paper";
@@ -17,7 +18,8 @@ import KeyboardReturn from "@material-ui/icons/KeyboardReturn";
 import { uploadImage, logoutUser } from "../../redux/actions/userActions";
 
 import EditDetails from "../EditDetails";
-import MyButton from "../../util/MyButton";
+import MyButton from "../../util/MyButton"; 
+import {loginWithFacebook} from '../../db'
 
 const styles = theme => ({
   paper: {
@@ -67,6 +69,15 @@ const styles = theme => ({
   },
   userBio: {
     textAlign: "center"
+  },
+  facebookLogin:{
+    background: '#4267b2',
+    textTransform: 'none',
+    "&:hover": {
+      background: "#4267b2"
+    },
+    width: '170px',
+    marginBottom: '10px'
   }
 });
 
@@ -89,6 +100,16 @@ const Profile = ({
 
   const handleEditPicture = () => document.querySelector("#imageInput").click();
   const handleLogout = () => logoutUser();
+
+  const facebookAuthServer = async () => {
+    try {
+      console.log('START')
+      const {data} = await axios.get('/auth/facebook'); 
+      console.log("➡️: facebookAuth -> data", data);
+    } catch (error) {
+      console.log("➡️: facebookAuth -> error", error);
+    }  
+  }
 
   let profileMarkup = !loading ? (
     authenticated ? (
@@ -174,6 +195,22 @@ const Profile = ({
             >
               Signup
             </Button>
+            <Button
+              className={classes.facebookLogin}
+              variant="contained"
+              color="primary"
+              onClick={loginWithFacebook}
+            >
+              Login by Facebook client side
+            </Button>  
+            <Button
+              className={classes.facebookLogin}
+              variant="contained"
+              color="primary"
+              onClick={facebookAuthServer}
+            >
+              Login by Facebook server side
+            </Button>  
           </div>
         </Typography>
       </Paper>

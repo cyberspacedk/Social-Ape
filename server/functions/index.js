@@ -2,7 +2,7 @@ const functions = require("firebase-functions");
 const firebase = require("firebase");
 const firebaseConfig = require("./utils/config");
 const app = require("express")();
-const cors = require("cors");
+const cors = require("cors"); 
 
 app.use(cors());
 
@@ -11,6 +11,7 @@ const { db } = require("./utils/admin");
 const {
   signUp,
   logIn,
+  socials,
   uploadImage,
   addUserDetails,
   getAuthenticatedUser,
@@ -33,6 +34,7 @@ firebase.initializeApp(firebaseConfig);
 // authentication
 app.post("/signup", signUp);
 app.post("/login", logIn);
+app.use("/auth/facebook", socials);
 
 // user
 app.post("/user/image", authMiddleware, uploadImage);
