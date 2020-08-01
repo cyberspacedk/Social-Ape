@@ -1,7 +1,5 @@
 # Social-Ape
 
-> [Demo](https://social-ape-f0156.web.app/)
-
 #### Simple social networking app, user can:
 - create account
 - create post
